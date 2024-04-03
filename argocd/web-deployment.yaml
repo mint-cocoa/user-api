@@ -31,8 +31,8 @@ spec:
             - 0.0.0.0
             - --port
             - "8000"
-          image: web
-          name: web-ticketmanagement
+          image: kasd0134/amusementservice:ticketmanagement
+          name: ticketmanagement
           ports:
             - containerPort: 8000
               hostPort: 8000
