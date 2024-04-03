@@ -1,18 +1,29 @@
-name: Docker Image CI
+# .github/workflows/build.yml
+name: Build and Push Docker Images
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-
-  build:
-
+  build_service1:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build TicketManagement  --file Dockerfile --tag my-image-name:$(date +%s)
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.11
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r TicketManagement/requirements.txt
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: TicketManagement
+        push: true
+        tags: my-registry/service1:latest
+
+  
