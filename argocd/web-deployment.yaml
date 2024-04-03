@@ -32,6 +32,7 @@ spec:
             - --port
             - "8000"
           image: kasd0134/amusementservice:ticketmanagement
+          platform: linux/arm64/v8
           name: ticketmanagement
           ports:
             - containerPort: 8000
