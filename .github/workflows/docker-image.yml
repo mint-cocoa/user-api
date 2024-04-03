@@ -31,4 +31,4 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: TicketManagement
-        tags: kasd0134/amusementservice:latest
+        tags: kasd0134/amusementservice:ticketmanagement
