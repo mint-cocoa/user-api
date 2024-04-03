@@ -5,13 +5,13 @@ metadata:
     kompose.cmd: kompose convert
     kompose.version: 1.32.0 (HEAD)
   labels:
-    io.kompose.service: web
-  name: web
+    io.kompose.service: ticket
+  name: ticket
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: web
+      io.kompose.service: ticket
   strategy:
     type: Recreate
   template:
@@ -21,7 +21,7 @@ spec:
         kompose.version: 1.32.0 (HEAD)
       labels:
         io.kompose.network/ticketmanagement-default: "true"
-        io.kompose.service: web
+        io.kompose.service: ticket
     spec:
       containers:
         - args:
@@ -32,17 +32,16 @@ spec:
             - --port
             - "8000"
           image: kasd0134/amusementservice:ticketmanagement
-          platform: linux/arm64/v8
-          name: ticketmanagement
+          name: ticket
           ports:
             - containerPort: 8000
               hostPort: 8000
               protocol: TCP
           volumeMounts:
             - mountPath: /app
-              name: web-claim0
+              name: ticket-claim0
       restartPolicy: Always
       volumes:
-        - name: web-claim0
+        - name: ticket-claim0
           persistentVolumeClaim:
-            claimName: web-claim0
+            claimName: ticket-claim0
