@@ -27,12 +27,11 @@ def generate_ticket(ticket_info: dict, secret_key: str, algorithm: str):
     token = jwt.encode(payload, secret_key, algorithm=algorithm)
     return {"ticket_id": payload["ticket_id"], "token": token}
 
-
 class Ticket(BaseModel):
     ticket_type: str
     valid_date: str
-    
-@app.post("/user/ticket/buy")
+
+@app.post("/ticket/add")
 def buy_ticket(ticket: Ticket):
     ticket_info = generate_ticket(ticket.dict(), SECRET_KEY, ALGORITHM)
     # 티켓 정보를 데이터베이스에 저장
@@ -42,7 +41,7 @@ def buy_ticket(ticket: Ticket):
     return {"message": "Ticket purchase successful", "ticket_info": ticket_info}
 
 
-@app.post("user/ticket/verify/")
+@app.post("/ticket/verify/")
 def verify_ticket(token: str ):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

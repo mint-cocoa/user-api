@@ -9,9 +9,7 @@ from pydantic import BaseModel
 class User(BaseModel):
     username: str   
     usertype: str
-    password: str
-    
-    
+    password: str 
 SECRET_KEY = "a_very_secret_key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 
