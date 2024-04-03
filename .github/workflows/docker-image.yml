@@ -22,6 +22,6 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./Ticketmanagement/Dockerfile
+        file: ./TicketManagement/Dockerfile
         push: true
         tags: kasd0134/amusementservice:latest
