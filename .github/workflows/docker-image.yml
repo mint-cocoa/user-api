@@ -34,4 +34,5 @@ jobs:
       with:
         context: ./TicketManagement
         push: true
+        platforms: linux/amd64,linux/arm64
         tags: kasd0134/amusementservice:1.0
