@@ -25,6 +25,7 @@ spec:
     spec:
       containers:
         - image: kasd0134/amusementservice:1.0
+          imagePullPolicy: Always
           name: ticket
           ports:
             - containerPort: 8000
