@@ -24,14 +24,7 @@ spec:
         io.kompose.service: ticket
     spec:
       containers:
-        - args:
-            - uvicorn
-            - main:app
-            - --host
-            - 0.0.0.0
-            - --port
-            - "8000"
-          image: kasd0134/amusementservice:1.0
+        - image: kasd0134/amusementservice:1.0
           name: ticket
           ports:
             - containerPort: 8000
