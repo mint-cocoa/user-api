@@ -5,3 +5,4 @@ passlib
 python-jose[cryptography]
 python-multipart
 PyJWT
+mysql-connector-python

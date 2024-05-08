@@ -7,14 +7,55 @@ from pydantic import BaseModel
 from pymongo import MongoClient
 from pydantic import Field
 import jwt
+import mysql.connector
+from mysql.connector import Error
 import uuid
 from datetime import datetime, timedelta
 ALGORITHM = "HS256"
 SECRET_KEY = "test"
+host = "localhost"
+db_user = "root"
+db_password = "clqdel547w"
+db_name = "my_database"
+
 app = FastAPI()
-client = MongoClient('mongodb://mongodb:27017/')
-db = client['mydatabase']
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+def create_db_connection(host_name, user_name, user_password, db_name):
+    connection = None
+    try:
+        connection = mysql.connector.connect(
+            host=host_name,
+            user=user_name,
+            passwd=user_password,
+            database=db_name
+        )
+        print("MySQL Database connection successful")
+    except Error as e:
+        print(f"The error '{e}' occurred")
+    return connection
+
+connection = create_db_connection(host, db_user, db_password, db_name)
+def execute_query(connection, query):
+    cursor = connection.cursor()
+    try:
+        cursor.execute(query)
+        connection.commit()
+        print("Query successful")
+    except Error as e:
+        print(f"The error '{e}' occurred")
+    
+    
+def insert_ticket(connection, ticket_type, valid_date):
+    query = f"""
+    INSERT INTO tickets (ticket_type, valid_date)
+    VALUES ('{ticket_type}', '{valid_date}');
+    """
+    execute_query(connection, query)
+
+
+       
+
 
 def generate_ticket(ticket_info: dict, secret_key: str, algorithm: str):
     # 토큰에 포함할 정보를 정의합니다.
@@ -35,10 +76,13 @@ class Ticket(BaseModel):
 def buy_ticket(ticket: Ticket):
     ticket_info = generate_ticket(ticket.dict(), SECRET_KEY, ALGORITHM)
     # 티켓 정보를 데이터베이스에 저장
-    tickets_collection = db['tickets'] # 'tickets'라는 이름의 컬렉션 선택
-    tickets_collection.insert_one(ticket_info.dict())
+    try:
+        insert_ticket(connection, ticket_info["ticket_type"], ticket_info["valid_date"])
+        return {"message": "Ticket added successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
     
-    return {"message": "Ticket purchase successful", "ticket_info": ticket_info}
+
 
 
 @app.post("/ticket/verify/")
